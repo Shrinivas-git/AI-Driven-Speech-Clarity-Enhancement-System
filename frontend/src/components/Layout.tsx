@@ -17,11 +17,7 @@ import {
   InformationCircleIcon,
 } from '@heroicons/react/24/outline';
 
-interface LayoutProps {
-  // No children prop needed - using Outlet
-}
-
-export const Layout: React.FC<LayoutProps> = () => {
+export const Layout: React.FC = () => {
   const { user, logout, usageInfo } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const location = useLocation();
@@ -39,13 +35,12 @@ export const Layout: React.FC<LayoutProps> = () => {
     { name: 'History', href: '/app/history', icon: ClockIcon },
     { name: 'Subscription', href: '/app/subscription', icon: CogIcon },
     { name: 'Profile', href: '/app/profile', icon: UserIcon },
-    { name: 'About Us', href: '/app/about', icon: InformationCircleIcon },
+    { name: 'About', href: '/app/about', icon: InformationCircleIcon },
   ];
 
-  // Add admin link if user is admin
   if (user?.role === 'admin') {
     navigation.push({
-      name: 'Admin Panel',
+      name: 'Admin',
       href: '/app/admin',
       icon: ShieldCheckIcon,
     });
@@ -54,83 +49,101 @@ export const Layout: React.FC<LayoutProps> = () => {
   const isCurrentPath = (path: string) => location.pathname === path;
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
+    <div className="min-h-screen bg-gray-50">
       {/* Top Navigation Bar */}
-      <nav className="bg-white dark:bg-gray-800 shadow dark:shadow-gray-900/50 transition-colors duration-200">
+      <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             {/* Logo and Brand */}
-            <div className="flex items-center">
-              <h1 className="text-xl font-bold text-gray-900 dark:text-white">Speech Clarity</h1>
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg bg-gray-900 flex items-center justify-center">
+                  <span className="text-white font-bold text-sm">SC</span>
+                </div>
+                <span className="text-lg font-semibold text-gray-900">Speech Clarity</span>
+              </div>
             </div>
 
             {/* Desktop Navigation Links */}
-            <div className="hidden md:flex md:items-center md:space-x-1">
-              {navigation.map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.href}
-                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                    isCurrentPath(item.href)
-                      ? 'bg-blue-100 dark:bg-blue-900 text-blue-900 dark:text-blue-100'
-                      : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white'
-                  }`}
-                >
-                  {item.name}
-                </Link>
-              ))}
+            <div className="hidden md:flex md:items-center md:gap-1">
+              {navigation.map((item) => {
+                const Icon = item.icon;
+                const isCurrent = isCurrentPath(item.href);
+                return (
+                  <Link
+                    key={item.name}
+                    to={item.href}
+                    className={`
+                      flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium
+                      transition-colors duration-200
+                      ${isCurrent
+                        ? 'bg-gray-100 text-gray-900'
+                        : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                      }
+                    `}
+                  >
+                    <Icon className="w-4 h-4" />
+                    <span>{item.name}</span>
+                  </Link>
+                );
+              })}
             </div>
 
             {/* Right side - Theme, Usage, User */}
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center gap-3">
               {/* Theme Toggle */}
               <button
                 onClick={toggleTheme}
-                className="p-2 text-gray-400 hover:text-gray-600 dark:text-gray-300 dark:hover:text-white rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                className="p-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors duration-200"
                 title={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
               >
                 {theme === 'light' ? (
-                  <MoonIcon className="h-5 w-5" />
+                  <MoonIcon className="w-5 h-5" />
                 ) : (
-                  <SunIcon className="h-5 w-5" />
+                  <SunIcon className="w-5 h-5" />
                 )}
               </button>
 
               {/* Usage indicator - Desktop */}
               {usageInfo && !usageInfo.is_premium && (
-                <div className="hidden md:block text-sm text-gray-600 dark:text-gray-300">
-                  <span className="font-medium">{usageInfo.remaining_uses}</span> uses left
+                <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gray-100 border border-gray-200">
+                  <span className="text-sm text-gray-700">
+                    <span className="font-semibold text-gray-900">{usageInfo.remaining_uses}</span> uses left
+                  </span>
                 </div>
               )}
               
               {/* Premium badge */}
               {usageInfo?.is_premium && (
-                <span className="hidden md:inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-100">
-                  Premium
-                </span>
+                <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-yellow-50 border border-yellow-200">
+                  <span className="text-sm font-semibold text-yellow-700">Premium</span>
+                </div>
               )}
               
               {/* User menu - Desktop */}
-              <div className="hidden md:flex items-center space-x-2">
-                <span className="text-sm text-gray-700 dark:text-gray-300">{user?.name}</span>
+              <div className="hidden md:flex items-center gap-3 px-3 py-1.5 rounded-lg bg-gray-100 border border-gray-200">
+                <div className="w-8 h-8 rounded-lg bg-gray-900 flex items-center justify-center text-white font-semibold text-sm">
+                  {user?.name?.charAt(0).toUpperCase()}
+                </div>
+                <span className="text-sm text-gray-900 font-medium">{user?.name}</span>
                 <button
                   onClick={handleLogout}
-                  className="text-gray-400 dark:text-gray-300 hover:text-gray-600 dark:hover:text-white p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  className="p-1.5 rounded-lg text-gray-600 hover:text-red-600 hover:bg-gray-200 transition-colors duration-200"
                   title="Logout"
                 >
-                  <ArrowRightOnRectangleIcon className="h-5 w-5" />
+                  <ArrowRightOnRectangleIcon className="w-5 h-5" />
                 </button>
               </div>
 
               {/* Mobile menu button */}
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden p-2 rounded-md text-gray-400 hover:text-gray-600 dark:text-gray-300 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+                className="md:hidden p-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors duration-200"
               >
                 {mobileMenuOpen ? (
-                  <XMarkIcon className="h-6 w-6" />
+                  <XMarkIcon className="w-6 h-6" />
                 ) : (
-                  <Bars3Icon className="h-6 w-6" />
+                  <Bars3Icon className="w-6 h-6" />
                 )}
               </button>
             </div>
@@ -139,56 +152,73 @@ export const Layout: React.FC<LayoutProps> = () => {
 
         {/* Mobile Navigation Menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden border-t border-gray-200 dark:border-gray-700">
-            <div className="px-2 pt-2 pb-3 space-y-1">
-              {navigation.map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
-                    isCurrentPath(item.href)
-                      ? 'bg-blue-100 dark:bg-blue-900 text-blue-900 dark:text-blue-100'
-                      : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white'
-                  }`}
-                >
-                  {item.name}
-                </Link>
-              ))}
+          <div className="md:hidden border-t border-gray-200 bg-white">
+            <div className="px-4 pt-2 pb-3 space-y-1">
+              {navigation.map((item) => {
+                const Icon = item.icon;
+                const isCurrent = isCurrentPath(item.href);
+                return (
+                  <Link
+                    key={item.name}
+                    to={item.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`
+                      flex items-center gap-3 px-4 py-3 rounded-lg text-base font-medium
+                      transition-colors duration-200
+                      ${isCurrent
+                        ? 'bg-gray-100 text-gray-900'
+                        : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                      }
+                    `}
+                  >
+                    <Icon className="w-5 h-5" />
+                    <span>{item.name}</span>
+                  </Link>
+                );
+              })}
             </div>
             
             {/* Mobile user info */}
-            <div className="pt-4 pb-3 border-t border-gray-200 dark:border-gray-700">
-              <div className="px-4 flex items-center justify-between">
-                <div>
-                  <div className="text-base font-medium text-gray-800 dark:text-gray-200">{user?.name}</div>
-                  <div className="text-sm text-gray-500 dark:text-gray-400">{user?.email}</div>
-                  {usageInfo && !usageInfo.is_premium && (
-                    <div className="text-sm text-gray-600 dark:text-gray-300 mt-1">
-                      <span className="font-medium">{usageInfo.remaining_uses}</span> uses remaining
-                    </div>
-                  )}
-                  {usageInfo?.is_premium && (
-                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-100 mt-1">
-                      Premium
-                    </span>
-                  )}
+            <div className="px-4 py-4 border-t border-gray-200">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-gray-900 flex items-center justify-center text-white font-semibold">
+                    {user?.name?.charAt(0).toUpperCase()}
+                  </div>
+                  <div>
+                    <div className="text-sm font-semibold text-gray-900">{user?.name}</div>
+                    <div className="text-xs text-gray-500">{user?.email}</div>
+                  </div>
                 </div>
                 <button
                   onClick={handleLogout}
-                  className="text-gray-400 dark:text-gray-300 hover:text-gray-600 dark:hover:text-white p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+                  className="p-2 rounded-lg text-gray-600 hover:text-red-600 hover:bg-gray-100 transition-colors duration-200"
                 >
-                  <ArrowRightOnRectangleIcon className="h-6 w-6" />
+                  <ArrowRightOnRectangleIcon className="w-5 h-5" />
                 </button>
               </div>
+              
+              {usageInfo && !usageInfo.is_premium && (
+                <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-100 border border-gray-200">
+                  <span className="text-sm text-gray-700">
+                    <span className="font-semibold text-gray-900">{usageInfo.remaining_uses}</span> uses remaining
+                  </span>
+                </div>
+              )}
+              
+              {usageInfo?.is_premium && (
+                <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-yellow-50 border border-yellow-200">
+                  <span className="text-sm font-semibold text-yellow-700">Premium Member</span>
+                </div>
+              )}
             </div>
           </div>
         )}
       </nav>
 
       {/* Page content */}
-      <main className="flex-1">
-        <div className="py-6">
+      <main>
+        <div className="py-8">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
             <Outlet />
           </div>

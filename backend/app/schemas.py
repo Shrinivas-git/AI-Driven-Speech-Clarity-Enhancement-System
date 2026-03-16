@@ -171,13 +171,16 @@ class AudioHistoryResponse(BaseModel):
     """Schema for audio history item."""
     audio_id: int
     original_filename: str
+    original_audio_path: Optional[str] = None
+    enhanced_audio_path: Optional[str] = None
     transcript_raw: Optional[str]
     transcript_cleaned: Optional[str]
-    output_mode: OutputMode
+    output_mode: str
     processing_duration: Optional[float]
     file_size_mb: Optional[float]
     created_at: datetime
     fluency_scores: Optional[Dict[str, Any]] = None
+    user_info: Optional[Dict[str, Any]] = None  # Only populated for admin users
     
     class Config:
         from_attributes = True

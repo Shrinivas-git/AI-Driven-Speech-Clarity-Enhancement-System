@@ -35,6 +35,7 @@ async def get_processing_history(
 ):
     """
     Get paginated processing history for the current user.
+    For admin users, returns all users' history with user information.
     
     Supports filtering by:
     - Output mode (audio, text, both)
@@ -43,9 +44,13 @@ async def get_processing_history(
     """
     try:
         # Build base query
-        query = db.query(AudioHistory).filter(
-            AudioHistory.user_id == current_user.user_id
-        )
+        # Admin users can see all history, regular users only see their own
+        if current_user.role == 'admin':
+            query = db.query(AudioHistory)
+        else:
+            query = db.query(AudioHistory).filter(
+                AudioHistory.user_id == current_user.user_id
+            )
         
         # Apply filters
         if output_mode:
@@ -72,7 +77,7 @@ async def get_processing_history(
         offset = (page - 1) * per_page
         items = query.order_by(desc(AudioHistory.created_at)).offset(offset).limit(per_page).all()
         
-        # Enrich with fluency scores
+        # Enrich with fluency scores and user info (for admin)
         history_items = []
         for item in items:
             fluency_score = db.query(FluencyScore).filter(
@@ -93,6 +98,17 @@ async def get_processing_history(
                     "pauses_after": fluency_score.pause_count_after
                 }
             
+            # Get user info for admin
+            user_info = None
+            if current_user.role == 'admin':
+                user = db.query(User).filter(User.user_id == item.user_id).first()
+                if user:
+                    user_info = {
+                        "user_id": user.user_id,
+                        "name": user.name,
+                        "email": user.email
+                    }
+            
             # Create response dict manually to avoid ORM relationship issues
             history_response = AudioHistoryResponse(
                 audio_id=item.audio_id,
@@ -105,7 +121,8 @@ async def get_processing_history(
                 processing_duration=item.processing_duration,
                 file_size_mb=item.file_size_mb,
                 created_at=item.created_at,
-                fluency_scores=fluency_data
+                fluency_scores=fluency_data,
+                user_info=user_info
             )
             history_items.append(history_response)
         

@@ -400,30 +400,23 @@ export const ProcessAudioPage: React.FC = () => {
       </div>
 
       {/* File Upload / Recording */}
-      <div className="bg-white dark:bg-gray-800 shadow rounded-lg">
+      <div className="bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 shadow rounded-lg">
         <div className="px-4 py-5 sm:p-6">
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
             {/* File Upload */}
             <div>
-              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">Upload Audio File</h3>
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4 text-center">Upload Audio File</h3>
               <div
-                className="upload-area"
+                className="cursor-pointer transition-transform hover:scale-105 flex items-center justify-center py-8"
                 onDrop={handleDrop}
                 onDragOver={handleDragOver}
                 onClick={() => fileInputRef.current?.click()}
               >
-                <CloudArrowUpIcon className="mx-auto h-12 w-12 text-gray-400" />
-                <div className="mt-4">
-                  <p className="text-sm text-gray-600">
-                    <span className="font-medium text-primary-600 cursor-pointer">
-                      Click to upload
-                    </span>{' '}
-                    or drag and drop
-                  </p>
-                  <p className="text-xs text-gray-500 mt-1">
-                    WAV, FLAC, MP3 up to 50MB
-                  </p>
-                </div>
+                <img 
+                  src="/pic4.png" 
+                  alt="Upload Audio" 
+                  className="h-64 w-64 object-contain"
+                />
                 <input
                   ref={fileInputRef}
                   type="file"
@@ -434,7 +427,7 @@ export const ProcessAudioPage: React.FC = () => {
               </div>
               
               {file && (
-                <div className="mt-4 p-3 bg-gray-50 dark:bg-gray-700 rounded-md">
+                <div className="mt-4 p-3 bg-white dark:bg-gray-700 rounded-md shadow-sm">
                   <p className="text-sm text-gray-700 dark:text-gray-300">
                     <span className="font-medium">Selected:</span> {file.name}
                   </p>
@@ -447,34 +440,34 @@ export const ProcessAudioPage: React.FC = () => {
 
             {/* Recording */}
             <div>
-              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">Record Audio</h3>
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4 text-center">Record Audio</h3>
               <div className="text-center">
-                {!isRecording ? (
-                  <button
-                    onClick={startRecording}
-                    className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-                  >
-                    <MicrophoneIcon className="h-5 w-5 mr-2" />
-                    Start Recording
-                  </button>
-                ) : (
-                  <button
-                    onClick={stopRecording}
-                    className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
-                  >
-                    <StopIcon className="h-5 w-5 mr-2" />
-                    Stop Recording
-                  </button>
-                )}
-                
-                {isRecording && (
-                  <div className="mt-4">
-                    <div className="flex items-center justify-center space-x-2">
-                      <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
-                      <span className="text-sm text-gray-600">Recording...</span>
+                <div 
+                  className="cursor-pointer transition-transform hover:scale-105 flex items-center justify-center py-8 relative"
+                  onClick={() => {
+                    if (!isRecording) {
+                      startRecording();
+                    } else {
+                      stopRecording();
+                    }
+                  }}
+                >
+                  <img 
+                    src="/pic3.png" 
+                    alt="Record Audio" 
+                    className="h-64 w-64 object-contain"
+                  />
+                  {isRecording && (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="flex flex-col items-center">
+                        <div className="w-6 h-6 bg-red-500 rounded-full animate-pulse mb-2"></div>
+                        <span className="text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 px-3 py-1 rounded-full shadow-lg">
+                          Recording...
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
             </div>
           </div>

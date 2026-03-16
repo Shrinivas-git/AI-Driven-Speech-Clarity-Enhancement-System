@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useAuth } from '../contexts/AuthContext';
 import { apiUtils } from '../utils/api';
 import {
   MagnifyingGlassIcon,
@@ -9,6 +10,7 @@ import {
   SpeakerWaveIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
+  UserIcon,
 } from '@heroicons/react/24/outline';
 import toast from 'react-hot-toast';
 
@@ -26,6 +28,11 @@ interface AudioHistoryItem {
     after_score: number;
     improvement: number;
   };
+  user_info?: {
+    user_id: number;
+    name: string;
+    email: string;
+  };
 }
 
 interface HistoryResponse {
@@ -38,6 +45,7 @@ interface HistoryResponse {
 }
 
 export const HistoryPage: React.FC = () => {
+  const { user } = useAuth();
   const [history, setHistory] = useState<HistoryResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedItems, setSelectedItems] = useState<number[]>([]);
@@ -48,6 +56,8 @@ export const HistoryPage: React.FC = () => {
   });
   const [currentPage, setCurrentPage] = useState(1);
   const [showFilters, setShowFilters] = useState(false);
+  
+  const isAdmin = user?.role === 'admin';
 
   useEffect(() => {
     loadHistory();
@@ -174,9 +184,16 @@ export const HistoryPage: React.FC = () => {
         <div className="px-4 py-5 sm:p-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Processing History</h1>
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+                Processing History
+                {isAdmin && (
+                  <span className="ml-3 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">
+                    Admin View - All Users
+                  </span>
+                )}
+              </h1>
               <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                View and manage your processed audio files
+                {isAdmin ? 'View and manage all processed audio files' : 'View and manage your processed audio files'}
               </p>
             </div>
             
@@ -339,6 +356,17 @@ export const HistoryPage: React.FC = () => {
                               <span>{item.processing_duration.toFixed(1)}s processing</span>
                             )}
                           </div>
+
+                          {/* User info for admin */}
+                          {isAdmin && item.user_info && (
+                            <div className="mt-2 flex items-center space-x-2 text-xs">
+                              <UserIcon className="h-4 w-4 text-gray-400" />
+                              <span className="text-gray-600 dark:text-gray-400">
+                                <span className="font-medium">{item.user_info.name}</span>
+                                <span className="text-gray-500 dark:text-gray-500"> ({item.user_info.email})</span>
+                              </span>
+                            </div>
+                          )}
 
                           {item.fluency_scores && (
                             <div className="mt-2 flex items-center space-x-4 text-xs">

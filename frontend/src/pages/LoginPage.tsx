@@ -30,43 +30,53 @@ export const LoginPage: React.FC = () => {
   return (
     <div className="min-h-screen flex bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       {/* Left side - Branding */}
-      <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-blue-600 to-indigo-600 p-12 flex-col justify-between relative overflow-hidden">
-        <div className="absolute inset-0 bg-grid-white/10"></div>
-        <div className="relative z-10">
-          <Link to="/" className="flex items-center space-x-2 text-white">
-            <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center">
-              <SparklesIcon className="w-6 h-6" />
-            </div>
-            <span className="text-2xl font-bold">Speech Clarity</span>
-          </Link>
-        </div>
+      <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
+        {/* Background Image */}
+        <img 
+          src="/pic2.jpg" 
+          alt="Speech Technology" 
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        {/* Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/85 to-indigo-600/85"></div>
         
-        <div className="relative z-10 space-y-6">
-          <h1 className="text-4xl font-bold text-white leading-tight">
-            Transform Your Speech
-            <br />
-            With AI Power
-          </h1>
-          <p className="text-blue-100 text-lg">
-            Join thousands of users enhancing their audio with our advanced neural network technology.
-          </p>
-          <div className="flex items-center space-x-8 text-white/90">
-            <div>
-              <div className="text-3xl font-bold">50.5%</div>
-              <div className="text-sm text-blue-100">Better Accuracy</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold">37%</div>
-              <div className="text-sm text-blue-100">Smoother Signals</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold">60%</div>
-              <div className="text-sm text-blue-100">Noise Reduction</div>
+        <div className="relative z-10 p-12 flex flex-col justify-between w-full">
+          <div>
+            <Link to="/" className="flex items-center space-x-2 text-white">
+              <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center">
+                <SparklesIcon className="w-6 h-6" />
+              </div>
+              <span className="text-2xl font-bold">Speech Clarity</span>
+            </Link>
+          </div>
+          
+          <div className="space-y-6">
+            <h1 className="text-4xl font-bold text-white leading-tight">
+              Transform Your Speech
+              <br />
+              With AI Power
+            </h1>
+            <p className="text-blue-100 text-lg">
+              Join thousands of users enhancing their audio with our advanced neural network technology.
+            </p>
+            <div className="flex items-center space-x-8 text-white/90">
+              <div>
+                <div className="text-3xl font-bold">50.5%</div>
+                <div className="text-sm text-blue-100">Better Accuracy</div>
+              </div>
+              <div>
+                <div className="text-3xl font-bold">37%</div>
+                <div className="text-sm text-blue-100">Smoother Signals</div>
+              </div>
+              <div>
+                <div className="text-3xl font-bold">60%</div>
+                <div className="text-sm text-blue-100">Noise Reduction</div>
+              </div>
             </div>
           </div>
+          
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
         </div>
-        
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
       </div>
 
       {/* Right side - Login Form */}
@@ -140,24 +150,6 @@ export const LoginPage: React.FC = () => {
                 )}
               </button>
             </form>
-
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-200"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-4 bg-white text-gray-500">Demo credentials</span>
-              </div>
-            </div>
-
-            <div className="bg-gray-50 rounded-lg p-4 text-center space-y-1">
-              <div className="text-sm text-gray-600 font-medium">
-                Admin Account
-              </div>
-              <div className="text-xs text-gray-500">
-                admin@speechclarity.com / admin123
-              </div>
-            </div>
 
             <div className="text-center text-sm">
               <span className="text-gray-600">Don't have an account? </span>
