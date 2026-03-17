@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 """
 Speech Clarity Enhancement API - Production Version
 
@@ -15,13 +16,21 @@ from fastapi.responses import FileResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBearer
 from sqlalchemy.orm import Session
+=======
+from fastapi import FastAPI, UploadFile, File, Form
+from fastapi.responses import FileResponse, JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
+>>>>>>> 015c03c9e65da3a9fde160ed1e1b7b748a0ed461
 from pathlib import Path
 import uuid
 import sys
 import logging
+<<<<<<< HEAD
 import time
 from datetime import datetime
 from typing import Optional
+=======
+>>>>>>> 015c03c9e65da3a9fde160ed1e1b7b748a0ed461
 
 # Configure logging
 logging.basicConfig(
@@ -31,6 +40,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+<<<<<<< HEAD
 # Import database and models
 from .database import get_database, init_database, check_database_connection
 from .models import User, AudioHistory, FluencyScore, OutputMode, UserRole
@@ -42,6 +52,8 @@ from .schemas import (
 )
 
 # Import existing pipeline
+=======
+>>>>>>> 015c03c9e65da3a9fde160ed1e1b7b748a0ed461
 try:
     from .pipeline import process_audio_file
 except ImportError as e:
@@ -49,13 +61,17 @@ except ImportError as e:
     logger.error("Make sure all dependencies are installed: pip install -r requirements.txt")
     raise
 
+<<<<<<< HEAD
 # Import API routers
 from .routers import auth, users, admin, dashboard, history
 
+=======
+>>>>>>> 015c03c9e65da3a9fde160ed1e1b7b748a0ed461
 BASE_DIR = Path(__file__).resolve().parent.parent
 MEDIA_DIR = BASE_DIR / "media"
 MEDIA_DIR.mkdir(parents=True, exist_ok=True)
 
+<<<<<<< HEAD
 # Create FastAPI app
 app = FastAPI(
     title="Speech Clarity Enhancement API - Production",
@@ -90,11 +106,26 @@ async def startup_event():
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173", "http://localhost:3000"],  # Restrict origins in production
+=======
+app = FastAPI(title="Speech Clarity Enhancement API", version="1.0.0")
+
+@app.on_event("startup")
+async def startup_event():
+    logger.info("=" * 50)
+    logger.info("Speech Clarity Enhancement API Starting...")
+    logger.info(f"Media directory: {MEDIA_DIR}")
+    logger.info("=" * 50)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+>>>>>>> 015c03c9e65da3a9fde160ed1e1b7b748a0ed461
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+<<<<<<< HEAD
 # Include API routers
 app.include_router(auth.router, prefix="/auth", tags=["Authentication"])
 app.include_router(users.router, prefix="/users", tags=["Users"])
@@ -108,10 +139,15 @@ app.include_router(admin.router, prefix="/admin", tags=["Admin"])
 # ===================================================
 
 @app.post("/enhance-speech", response_model=AudioProcessResponse)
+=======
+
+@app.post("/enhance-speech")
+>>>>>>> 015c03c9e65da3a9fde160ed1e1b7b748a0ed461
 async def enhance_speech(
     file: UploadFile = File(...),
     output_mode: str = Form("both"),  # "audio" | "text" | "both"
     calculate_metrics: bool = Form(True),
+<<<<<<< HEAD
     grammar_correction: bool = Form(True),  # NEW: Grammar correction toggle
     realtime: bool = Form(False),
     current_user: User = Depends(get_current_active_user),
@@ -142,12 +178,35 @@ async def enhance_speech(
     import asyncio
     
     start_time = time.time()
+=======
+    realtime: bool = Form(False)
+):
+    """
+    Main endpoint with enhanced features:
+    1. Saves uploaded audio
+    2. Runs ASR -> text cleaning -> TTS (based on output_mode)
+    3. Calculates fluency metrics (if requested)
+    4. Returns selected outputs
+    
+    Parameters:
+    - output_mode: "audio" | "text" | "both" - what to return
+    - calculate_metrics: true/false - whether to calculate fluency scores
+    - realtime: true/false - real-time mode flag (for future use)
+    """
+    import asyncio
+    import logging
+    import sys
+    
+    logging.basicConfig(level=logging.INFO, stream=sys.stdout)
+    logger = logging.getLogger(__name__)
+>>>>>>> 015c03c9e65da3a9fde160ed1e1b7b748a0ed461
     
     # Validate output_mode
     if output_mode not in ["audio", "text", "both"]:
         output_mode = "both"
         logger.warning(f"Invalid output_mode, defaulting to 'both'")
     
+<<<<<<< HEAD
     # Check usage limits
     usage_tracker = get_usage_tracker(db)
     try:
@@ -208,6 +267,23 @@ async def enhance_speech(
 
         # Process through AI pipeline
         try:
+=======
+    # Save input file
+    suffix = Path(file.filename or "audio").suffix or ".flac"
+    input_id = uuid.uuid4().hex
+    input_path = MEDIA_DIR / f"input_{input_id}{suffix}"
+
+    try:
+        logger.info(f"Received file: {file.filename}, mode: {output_mode}, metrics: {calculate_metrics}")
+        with input_path.open("wb") as f:
+            content = await file.read()
+            f.write(content)
+        logger.info(f"File saved: {input_path.name} ({len(content)} bytes)")
+
+        # Process through pipeline with timeout (max 2 minutes for faster feedback)
+        try:
+            # Run in executor to avoid blocking the event loop
+>>>>>>> 015c03c9e65da3a9fde160ed1e1b7b748a0ed461
             loop = asyncio.get_event_loop()
             result = await asyncio.wait_for(
                 loop.run_in_executor(
@@ -216,12 +292,17 @@ async def enhance_speech(
                     input_path, 
                     MEDIA_DIR,
                     output_mode,
+<<<<<<< HEAD
                     calculate_metrics,
                     grammar_correction  # Pass grammar correction flag
+=======
+                    calculate_metrics
+>>>>>>> 015c03c9e65da3a9fde160ed1e1b7b748a0ed461
                 ),
                 timeout=120.0  # 2 minute timeout
             )
             
+<<<<<<< HEAD
             processing_duration = time.time() - start_time
             logger.info(f"Processing completed in {processing_duration:.2f}s")
             
@@ -290,10 +371,21 @@ async def enhance_speech(
             if output_mode in ["text", "both"]:
                 response_data["cleaned_text"] = result.get("cleaned_text", "")
                 response_data["raw_text"] = result.get("raw_text", "")
+=======
+            logger.info("Processing completed successfully")
+            
+            # Build response based on output_mode
+            response = {}
+            
+            if output_mode in ["text", "both"]:
+                response["cleaned_text"] = result.get("cleaned_text", "")
+                response["raw_text"] = result.get("raw_text", "")
+>>>>>>> 015c03c9e65da3a9fde160ed1e1b7b748a0ed461
             
             if output_mode in ["audio", "both"]:
                 enhanced_path = result.get("enhanced_audio_path")
                 if enhanced_path:
+<<<<<<< HEAD
                     response_data["enhanced_audio_filename"] = enhanced_path.name
             
             if fluency_comparison:
@@ -337,10 +429,53 @@ async def enhance_speech(
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to process uploaded file: {e}"
+=======
+                    response["enhanced_audio_filename"] = enhanced_path.name
+            
+            if calculate_metrics and "fluency_metrics" in result:
+                response["fluency_metrics"] = result["fluency_metrics"]
+            
+            return JSONResponse(response)
+        except asyncio.TimeoutError:
+            logger.error("Processing timed out")
+            return JSONResponse(
+                {"detail": "Processing timed out after 2 minutes. Please try a shorter audio file or check server logs."},
+                status_code=500,
+            )
+        except Exception as e:
+            # Keep the server running even if ML deps aren't installed yet
+            logger.error(f"Processing failed: {e}", exc_info=True)
+            error_msg = str(e)
+            error_detail = error_msg
+            
+            # Make error message more user-friendly
+            if "Could not load audio" in error_msg or "load" in error_msg.lower():
+                if "webm" in error_msg.lower() or ".webm" in str(input_path).lower():
+                    error_detail = "WebM audio format not fully supported. Please try recording in WAV format or upload a WAV/FLAC/MP3 file."
+                else:
+                    error_detail = f"Could not load audio file. Supported formats: WAV, FLAC, MP3. Error: {error_msg}"
+            elif "TTS" in error_msg or "pyttsx3" in error_msg:
+                error_detail = "Text-to-speech generation failed. Please check if your system has a TTS engine installed."
+            elif "Whisper" in error_msg or "whisper" in error_msg:
+                error_detail = "Speech recognition failed. Please check if Whisper model is properly installed."
+            elif not error_detail or error_detail == "":
+                error_detail = f"Processing failed: {error_msg}"
+            
+            return JSONResponse(
+                {"detail": error_detail},
+                status_code=500,
+            )
+    except Exception as e:
+        logger.error(f"File upload failed: {e}", exc_info=True)
+        return JSONResponse(
+            {"detail": f"Failed to save uploaded file: {e}"},
+            status_code=500,
+>>>>>>> 015c03c9e65da3a9fde160ed1e1b7b748a0ed461
         )
 
 
 @app.get("/download/{filename}")
+<<<<<<< HEAD
 async def download_enhanced_audio(
     filename: str
 ):
@@ -368,10 +503,20 @@ async def download_enhanced_audio(
 # PUBLIC ENDPOINTS (NO AUTH REQUIRED)
 # ===================================================
 
+=======
+async def download_enhanced_audio(filename: str):
+    file_path = MEDIA_DIR / filename
+    if not file_path.exists():
+        return JSONResponse({"detail": "File not found"}, status_code=404)
+    return FileResponse(path=file_path, filename=file_path.name, media_type="audio/wav")
+
+
+>>>>>>> 015c03c9e65da3a9fde160ed1e1b7b748a0ed461
 @app.get("/")
 async def root():
     """Root endpoint - API information."""
     return JSONResponse({
+<<<<<<< HEAD
         "message": "Speech Clarity Enhancement API - Production",
         "version": "2.0.0",
         "features": [
@@ -386,12 +531,21 @@ async def root():
             "docs": "/docs",
             "auth": "/auth",
             "dashboard": "/dashboard"
+=======
+        "message": "Speech Clarity Enhancement API",
+        "version": "1.0.0",
+        "endpoints": {
+            "health": "/health",
+            "enhance": "/enhance-speech",
+            "docs": "/docs"
+>>>>>>> 015c03c9e65da3a9fde160ed1e1b7b748a0ed461
         }
     })
 
 @app.get("/health")
 async def health():
     """Health check endpoint for frontend connection monitoring."""
+<<<<<<< HEAD
     db_status = "connected" if check_database_connection() else "disconnected"
     return {
         "status": "ok", 
@@ -490,6 +644,9 @@ async def general_exception_handler(request: Request, exc: Exception):
             "timestamp": datetime.utcnow().isoformat()
         }
     )
+=======
+    return {"status": "ok", "message": "Backend is running"}
+>>>>>>> 015c03c9e65da3a9fde160ed1e1b7b748a0ed461
 
 
 

@@ -1,4 +1,5 @@
 """
+<<<<<<< HEAD
 Enhanced rule-based text cleaner with grammar and spelling correction.
 
 Goals:
@@ -18,6 +19,19 @@ try:
 except ImportError:
     SPELL_CHECKER_AVAILABLE = False
     print("Warning: pyspellchecker not available. Install with: pip install pyspellchecker")
+=======
+Simple rule-based text cleaner to remove common stuttering patterns.
+
+Goals:
+- Remove filler words (uh, um, er, ah, like, you know)
+- Collapse immediate word repetitions (e.g., "I I I want" -> "I want")
+- Handle hyphenated / partial repetitions (e.g., "b-b-because" -> "because")
+- Preserve overall meaning and sentence structure
+"""
+
+import re
+from typing import List
+>>>>>>> 015c03c9e65da3a9fde160ed1e1b7b748a0ed461
 
 FILLERS = {
     "uh", "uhh", "uhhh",
@@ -25,6 +39,10 @@ FILLERS = {
     "er", "err", "errr",
     "ah", "ahh", "ahhh",
     "hmm", "hmmm",
+<<<<<<< HEAD
+=======
+    "like", "like like",
+>>>>>>> 015c03c9e65da3a9fde160ed1e1b7b748a0ed461
     "you know", "ya know",
     "i mean", "i mean i mean",
     "sort of", "sorta",
@@ -52,15 +70,21 @@ def _remove_partial_repetitions(word: str) -> str:
 def _tokenize(text: str) -> List[str]:
     """
     Basic tokenization that keeps punctuation as separate tokens.
+<<<<<<< HEAD
     Preserves contractions like "didn't", "won't", "I'm".
     """
     # Match words (including contractions with apostrophes) or punctuation
     return re.findall(r"\w+(?:'\w+)?|[^\w\s]", text, re.UNICODE)
+=======
+    """
+    return re.findall(r"\w+|[^\w\s]", text, re.UNICODE)
+>>>>>>> 015c03c9e65da3a9fde160ed1e1b7b748a0ed461
 
 
 def _detokenize(tokens: List[str]) -> str:
     """
     Simple detokenization: join words with spaces, but not before punctuation.
+<<<<<<< HEAD
     Handles contractions properly (no space before apostrophe).
     """
     out = []
@@ -70,10 +94,18 @@ def _detokenize(tokens: List[str]) -> str:
             # Also don't add space if previous token was an apostrophe (for contractions)
             if i > 0 and tokens[i-1] != "'":
                 out.append(" ")
+=======
+    """
+    out = []
+    for i, tok in enumerate(tokens):
+        if i > 0 and tok not in {".", ",", "!", "?", ":", ";"}:
+            out.append(" ")
+>>>>>>> 015c03c9e65da3a9fde160ed1e1b7b748a0ed461
         out.append(tok)
     return "".join(out)
 
 
+<<<<<<< HEAD
 def _correct_spelling(text: str) -> str:
     """
     Correct common spelling errors using spell checker.
@@ -375,10 +407,16 @@ def clean_stuttered_text(raw_text: str, apply_grammar_correction: bool = True) -
     
     Returns:
         Cleaned text with optional grammar correction
+=======
+def clean_stuttered_text(raw_text: str) -> str:
+    """
+    Enhanced cleaning function with better stutter pattern detection.
+>>>>>>> 015c03c9e65da3a9fde160ed1e1b7b748a0ed461
     """
     if not raw_text or not raw_text.strip():
         return ""
     
+<<<<<<< HEAD
     # Step 1: Initial normalization
     text = raw_text.lower().strip()
     
@@ -433,10 +471,52 @@ def clean_stuttered_text(raw_text: str, apply_grammar_correction: bool = True) -
             prev_word = tok_lower
         else:
             # Reset on punctuation (allows same word in different sentences)
+=======
+    text = raw_text.lower().strip()
+
+    # Remove multi-word fillers first (longest first to avoid partial matches)
+    for phrase in sorted(FILLERS, key=len, reverse=True):
+        # Remove with word boundaries, handle multiple occurrences
+        pattern = rf"\b{re.escape(phrase)}\b"
+        while re.search(pattern, text):
+            text = re.sub(pattern, "", text, count=1)
+
+    # Handle partial word repetitions like "b-b-because", "th-th-that"
+    text = re.sub(r'\b(\w)-(\1-)*(\1+)\b', r'\3', text)  # b-b-because -> because
+    
+    # Handle character repetitions within words (e.g., "sooo" -> "so")
+    text = re.sub(r'(\w)\1{2,}', r'\1', text)  # sooo -> so, but keep "too" as is
+
+    # Normalize extra spaces
+    text = re.sub(r"\s+", " ", text).strip()
+
+    tokens = _tokenize(text)
+
+    # Apply partial repetition cleanup
+    tokens = [_remove_partial_repetitions(t) for t in tokens]
+
+    # Collapse immediate word repetitions (case-insensitive) with lookback
+    cleaned_tokens: List[str] = []
+    prev_word: str = ""
+    prev_prev_word: str = ""
+    
+    for tok in tokens:
+        if tok.isalpha():
+            # Skip if same as previous word (immediate repetition)
+            if tok == prev_word:
+                continue
+            # Skip if same as two words ago (A B A pattern)
+            if tok == prev_prev_word and prev_word != "":
+                continue
+            prev_prev_word = prev_word
+            prev_word = tok
+        else:
+>>>>>>> 015c03c9e65da3a9fde160ed1e1b7b748a0ed461
             prev_prev_word = ""
             prev_word = ""
         cleaned_tokens.append(tok)
 
+<<<<<<< HEAD
     # Step 8: Reconstruct text
     cleaned = _detokenize(cleaned_tokens)
     
@@ -461,6 +541,21 @@ def clean_stuttered_text(raw_text: str, apply_grammar_correction: bool = True) -
             cleaned = cleaned[0].upper() + cleaned[1:] if len(cleaned) > 1 else cleaned.upper()
             if not cleaned.endswith(('.', '!', '?')):
                 cleaned += '.'
+=======
+    # Final tidy-up
+    cleaned = _detokenize(cleaned_tokens)
+    
+    # Remove standalone filler words that might have been missed
+    cleaned = re.sub(r'\b(uh|um|er|ah|hmm)\b', '', cleaned, flags=re.IGNORECASE)
+    
+    # Normalize spaces again
+    cleaned = re.sub(r"\s+", " ", cleaned)
+    
+    # Capitalize first letter
+    cleaned = cleaned.strip()
+    if cleaned:
+        cleaned = cleaned[0].upper() + cleaned[1:] if len(cleaned) > 1 else cleaned.upper()
+>>>>>>> 015c03c9e65da3a9fde160ed1e1b7b748a0ed461
     
     return cleaned.strip()
 

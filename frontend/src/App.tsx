@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState, useRef } from "react";
 import { Waveform } from "./components/Waveform";
 
@@ -30,19 +31,39 @@ function audioBufferToWav(buffer: AudioBuffer): Blob {
   const channels = buffer.numberOfChannels;
   const sampleRate = buffer.sampleRate;
 
+=======
+import React, { useState, useEffect, useRef } from "react";
+import { Waveform } from "./components/Waveform";
+
+// Helper function to convert AudioBuffer to WAV Blob
+function audioBufferToWav(buffer: AudioBuffer): Blob {
+  const length = buffer.length;
+  const numberOfChannels = buffer.numberOfChannels;
+  const sampleRate = buffer.sampleRate;
+  const arrayBuffer = new ArrayBuffer(44 + length * numberOfChannels * 2);
+  const view = new DataView(arrayBuffer);
+  
+>>>>>>> 015c03c9e65da3a9fde160ed1e1b7b748a0ed461
   // WAV header
   const writeString = (offset: number, string: string) => {
     for (let i = 0; i < string.length; i++) {
       view.setUint8(offset + i, string.charCodeAt(i));
     }
   };
+<<<<<<< HEAD
 
   writeString(0, 'RIFF');
   view.setUint32(4, 36 + length * 2, true);
+=======
+  
+  writeString(0, 'RIFF');
+  view.setUint32(4, 36 + length * numberOfChannels * 2, true);
+>>>>>>> 015c03c9e65da3a9fde160ed1e1b7b748a0ed461
   writeString(8, 'WAVE');
   writeString(12, 'fmt ');
   view.setUint32(16, 16, true);
   view.setUint16(20, 1, true);
+<<<<<<< HEAD
   view.setUint16(22, channels, true);
   view.setUint32(24, sampleRate, true);
   view.setUint32(28, sampleRate * 2, true);
@@ -60,17 +81,64 @@ function audioBufferToWav(buffer: AudioBuffer): Blob {
     offset += 2;
   }
 
+=======
+  view.setUint16(22, numberOfChannels, true);
+  view.setUint32(24, sampleRate, true);
+  view.setUint32(28, sampleRate * numberOfChannels * 2, true);
+  view.setUint16(32, numberOfChannels * 2, true);
+  view.setUint16(34, 16, true);
+  writeString(36, 'data');
+  view.setUint32(40, length * numberOfChannels * 2, true);
+  
+  // Convert float samples to 16-bit PCM
+  let offset = 44;
+  for (let i = 0; i < length; i++) {
+    for (let channel = 0; channel < numberOfChannels; channel++) {
+      const sample = Math.max(-1, Math.min(1, buffer.getChannelData(channel)[i]));
+      view.setInt16(offset, sample < 0 ? sample * 0x8000 : sample * 0x7FFF, true);
+      offset += 2;
+    }
+  }
+  
+>>>>>>> 015c03c9e65da3a9fde160ed1e1b7b748a0ed461
   return new Blob([arrayBuffer], { type: 'audio/wav' });
 }
 
 const API_BASE = "http://localhost:8000";
 
+<<<<<<< HEAD
+=======
+type OutputMode = "audio" | "text" | "both";
+type FluencyMetrics = {
+  before: {
+    repetitions: number;
+    fillers: number;
+    pauses: number;
+    total_words: number;
+    fluency_score: number;
+  };
+  after: {
+    repetitions: number;
+    fillers: number;
+    pauses: number;
+    total_words: number;
+    fluency_score: number;
+  };
+  improvement: {
+    repetitions_reduced: number;
+    fillers_reduced: number;
+    score_improvement: number;
+  };
+};
+
+>>>>>>> 015c03c9e65da3a9fde160ed1e1b7b748a0ed461
 export const App: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
   const [originalUrl, setOriginalUrl] = useState<string | null>(null);
   const [enhancedUrl, setEnhancedUrl] = useState<string | null>(null);
   const [cleanedText, setCleanedText] = useState<string>("");
   const [rawText, setRawText] = useState<string>("");
+<<<<<<< HEAD
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [outputMode, setOutputMode] = useState<OutputMode>("both");
@@ -79,11 +147,22 @@ export const App: React.FC = () => {
   const [isDark, setIsDark] = useState<boolean>(false);
   const [realtimeMode, setRealtimeMode] = useState<boolean>(false);
   const [isRecording, setIsRecording] = useState<boolean>(false);
+=======
+  const [isDark, setIsDark] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [outputMode, setOutputMode] = useState<OutputMode>("both");
+  const [realtimeMode, setRealtimeMode] = useState<boolean>(false);
+  const [isRecording, setIsRecording] = useState<boolean>(false);
+  const [metrics, setMetrics] = useState<FluencyMetrics | null>(null);
+  const [showMetrics, setShowMetrics] = useState<boolean>(true);
+>>>>>>> 015c03c9e65da3a9fde160ed1e1b7b748a0ed461
   
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+<<<<<<< HEAD
     const selectedFile = e.target.files?.[0];
     if (selectedFile) {
       setFile(selectedFile);
@@ -96,6 +175,19 @@ export const App: React.FC = () => {
       setMetrics(null);
     }
   };
+=======
+    const f = e.target.files?.[0];
+    if (f) {
+      setFile(f);
+      setEnhancedUrl(null);
+      setCleanedText("");
+      setError(null);
+      const url = URL.createObjectURL(f);
+      setOriginalUrl(url);
+    }
+  };
+
+>>>>>>> 015c03c9e65da3a9fde160ed1e1b7b748a0ed461
   const handleEnhance = async (audioFile?: File) => {
     const fileToProcess = audioFile || file;
     if (!fileToProcess) return;
@@ -516,4 +608,11 @@ export const App: React.FC = () => {
       </div>
     </div>
   );
+<<<<<<< HEAD
 };
+=======
+};
+
+
+
+>>>>>>> 015c03c9e65da3a9fde160ed1e1b7b748a0ed461

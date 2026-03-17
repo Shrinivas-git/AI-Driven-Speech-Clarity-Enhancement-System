@@ -38,6 +38,7 @@ FILLER_WORDS = {
     "basically",
 }
 
+<<<<<<< HEAD
 # Common grammar error patterns
 GRAMMAR_ERROR_PATTERNS = [
     # Duplicate verbs
@@ -67,6 +68,8 @@ GRAMMAR_ERROR_PATTERNS = [
     (r'\bfor\s+process\s+what\b', 'nonsensical phrase'),
 ]
 
+=======
+>>>>>>> 015c03c9e65da3a9fde160ed1e1b7b748a0ed461
 
 def count_word_repetitions(text: str) -> int:
     """
@@ -118,6 +121,7 @@ def count_filler_words(text: str) -> int:
     return count
 
 
+<<<<<<< HEAD
 def count_grammar_errors(text: str) -> int:
     """
     Count basic grammar errors in text using simple pattern matching.
@@ -138,6 +142,8 @@ def count_grammar_errors(text: str) -> int:
     return error_count
 
 
+=======
+>>>>>>> 015c03c9e65da3a9fde160ed1e1b7b748a0ed461
 def estimate_pauses_from_audio(audio: np.ndarray, sample_rate: int, 
                                 silence_threshold: float = 0.02,
                                 min_pause_duration: float = 0.3) -> int:
@@ -244,19 +250,28 @@ def calculate_metrics_for_text(text: str) -> Dict[str, int]:
         return {
             "repetitions": 0,
             "fillers": 0,
+<<<<<<< HEAD
             "grammar_errors": 0,
+=======
+>>>>>>> 015c03c9e65da3a9fde160ed1e1b7b748a0ed461
             "total_words": 0,
         }
     
     repetitions = count_word_repetitions(text)
     fillers = count_filler_words(text)
+<<<<<<< HEAD
     grammar_errors = count_grammar_errors(text)
+=======
+>>>>>>> 015c03c9e65da3a9fde160ed1e1b7b748a0ed461
     total_words = len(re.findall(r'\b\w+\b', text.lower()))
     
     return {
         "repetitions": repetitions,
         "fillers": fillers,
+<<<<<<< HEAD
         "grammar_errors": grammar_errors,
+=======
+>>>>>>> 015c03c9e65da3a9fde160ed1e1b7b748a0ed461
         "total_words": total_words,
     }
 
@@ -283,13 +298,17 @@ def calculate_fluency_metrics(raw_text: str, cleaned_text: str,
     
     Returns: Dictionary with all metrics for before and after
     """
+<<<<<<< HEAD
     import logging
     logger = logging.getLogger(__name__)
     
+=======
+>>>>>>> 015c03c9e65da3a9fde160ed1e1b7b748a0ed461
     # Calculate metrics for raw (before) text
     raw_metrics = calculate_metrics_for_text(raw_text)
     raw_audio_metrics = calculate_metrics_for_audio(raw_audio, sample_rate)
     
+<<<<<<< HEAD
     logger.info(f"Raw text grammar errors: {raw_metrics['grammar_errors']}")
     
     # Calculate metrics for cleaned (after) text
@@ -297,6 +316,11 @@ def calculate_fluency_metrics(raw_text: str, cleaned_text: str,
     
     logger.info(f"Cleaned text grammar errors: {cleaned_metrics['grammar_errors']}")
     
+=======
+    # Calculate metrics for cleaned (after) text
+    cleaned_metrics = calculate_metrics_for_text(cleaned_text)
+    
+>>>>>>> 015c03c9e65da3a9fde160ed1e1b7b748a0ed461
     # Calculate fluency scores
     raw_score = calculate_fluency_score(
         raw_metrics["repetitions"],
@@ -312,12 +336,19 @@ def calculate_fluency_metrics(raw_text: str, cleaned_text: str,
         cleaned_metrics["total_words"]
     )
     
+<<<<<<< HEAD
     result = {
+=======
+    return {
+>>>>>>> 015c03c9e65da3a9fde160ed1e1b7b748a0ed461
         "before": {
             "repetitions": raw_metrics["repetitions"],
             "fillers": raw_metrics["fillers"],
             "pauses": raw_audio_metrics["pauses"],
+<<<<<<< HEAD
             "grammar_errors": raw_metrics["grammar_errors"],
+=======
+>>>>>>> 015c03c9e65da3a9fde160ed1e1b7b748a0ed461
             "total_words": raw_metrics["total_words"],
             "fluency_score": raw_score,
         },
@@ -325,13 +356,17 @@ def calculate_fluency_metrics(raw_text: str, cleaned_text: str,
             "repetitions": cleaned_metrics["repetitions"],
             "fillers": cleaned_metrics["fillers"],
             "pauses": 0,  # Not calculated for cleaned audio
+<<<<<<< HEAD
             "grammar_errors": cleaned_metrics["grammar_errors"],
+=======
+>>>>>>> 015c03c9e65da3a9fde160ed1e1b7b748a0ed461
             "total_words": cleaned_metrics["total_words"],
             "fluency_score": cleaned_score,
         },
         "improvement": {
             "repetitions_reduced": raw_metrics["repetitions"] - cleaned_metrics["repetitions"],
             "fillers_reduced": raw_metrics["fillers"] - cleaned_metrics["fillers"],
+<<<<<<< HEAD
             "grammar_errors_fixed": raw_metrics["grammar_errors"] - cleaned_metrics["grammar_errors"],
             "score_improvement": cleaned_score - raw_score,
         }
@@ -343,4 +378,9 @@ def calculate_fluency_metrics(raw_text: str, cleaned_text: str,
 
 
 
+=======
+            "score_improvement": cleaned_score - raw_score,
+        }
+    }
+>>>>>>> 015c03c9e65da3a9fde160ed1e1b7b748a0ed461
 

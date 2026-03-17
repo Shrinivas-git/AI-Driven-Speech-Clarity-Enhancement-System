@@ -1,6 +1,10 @@
 {
   "name": "speech-clarity-frontend",
+<<<<<<< HEAD
   "version": "2.0.0",
+=======
+  "version": "1.0.0",
+>>>>>>> 015c03c9e65da3a9fde160ed1e1b7b748a0ed461
   "private": true,
   "scripts": {
     "dev": "vite",
@@ -10,21 +14,29 @@
   "dependencies": {
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+<<<<<<< HEAD
     "react-router-dom": "^6.26.0",
     "axios": "^1.6.0",
     "wavesurfer.js": "^7.8.6",
     "@heroicons/react": "^2.0.18",
     "react-hot-toast": "^2.4.1"
+=======
+    "wavesurfer.js": "^7.8.6"
+>>>>>>> 015c03c9e65da3a9fde160ed1e1b7b748a0ed461
   },
   "devDependencies": {
     "@types/react": "^18.3.1",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react-swc": "^3.7.0",
     "typescript": "^5.6.3",
+<<<<<<< HEAD
     "vite": "^6.0.0",
     "autoprefixer": "^10.4.16",
     "postcss": "^8.4.31",
     "tailwindcss": "^3.3.5"
+=======
+    "vite": "^6.0.0"
+>>>>>>> 015c03c9e65da3a9fde160ed1e1b7b748a0ed461
   }
 }
 
@@ -37,6 +49,9 @@
 
 
 
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> 015c03c9e65da3a9fde160ed1e1b7b748a0ed461

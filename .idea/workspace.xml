@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="1d577238-8bd9-41e6-90bc-30ef06d9fdc2" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/ABSTRACT_CONCISE.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ABSTRACT_SHORT.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DARK_MODE_IMPLEMENTATION.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/HOMEPAGE_IMPROVEMENTS.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/NAVIGATION_UPDATE.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/NEW_FEATURES_GUIDE.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PROJECT_SUMMARY.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/RESEARCH_ABSTRACT.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/RUNNING_STATUS.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/START_HERE.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TRAINING_DOCUMENTATION.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TRAINING_IMPROVEMENTS.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TRAINING_RESULTS.md" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 7
+}</component>
+  <component name="ProjectId" id="3B26xjc5JAfhNoQrICI853UQ5wh" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Shrinivas Sondur/Documents/AI_Speech - Copy&quot;
+  }
+}</component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-python-sdk-4e2b1448bda8-9a97661f3031-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-252.27397.106" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="1d577238-8bd9-41e6-90bc-30ef06d9fdc2" name="Changes" comment="" />
+      <created>1773675066471</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1773675066471</updated>
+    </task>
+    <servers />
+  </component>
+</project>

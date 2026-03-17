@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Core FastAPI and server
 fastapi==0.115.0
 uvicorn[standard]==0.32.0
@@ -7,10 +8,19 @@ python-multipart==0.0.9
 torch==2.10.0
 torchaudio==2.10.0
 openai-whisper
+=======
+fastapi==0.115.0
+uvicorn[standard]==0.32.0
+python-multipart==0.0.9
+torch==2.10.0
+torchaudio==2.10.0
+openai-whisper==20231117
+>>>>>>> 015c03c9e65da3a9fde160ed1e1b7b748a0ed461
 soundfile==0.12.1
 librosa==0.10.2.post1
 numpy==1.26.4
 pyttsx3==2.98
+<<<<<<< HEAD
 pyspellchecker==0.8.1
 
 # Data validation and serialization
@@ -31,3 +41,6 @@ python-dotenv==1.0.0
 
 # Date and time utilities
 python-dateutil==2.8.2
+=======
+pydantic==2.9.2
+>>>>>>> 015c03c9e65da3a9fde160ed1e1b7b748a0ed461

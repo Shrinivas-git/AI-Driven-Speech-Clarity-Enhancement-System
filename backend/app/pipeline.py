@@ -39,10 +39,16 @@ def get_whisper_model() -> Any:
             import whisper  # type: ignore
         except Exception as e:
             raise _missing_dep(f"Whisper dependency not available: {e}")
+<<<<<<< HEAD
         # Use 'small' for better accuracy while still being reasonably fast
         # 'base' is faster but less accurate; 'small' provides better transcription quality
         # For even better accuracy, use 'medium' but it's much slower on CPU
         _whisper_model = whisper.load_model("small")
+=======
+        # Use 'base' for faster processing; 'medium' is more accurate but much slower on CPU
+        # For production, consider 'small' as a balance, or use GPU for 'medium'
+        _whisper_model = whisper.load_model("base")
+>>>>>>> 015c03c9e65da3a9fde160ed1e1b7b748a0ed461
     return _whisper_model
 
 
@@ -277,8 +283,12 @@ def audio_safe_slug(text: str) -> str:
 
 def process_audio_file(input_path: Path, out_dir: Path, 
                        output_mode: str = "both",
+<<<<<<< HEAD
                        calculate_metrics: bool = True,
                        grammar_correction: bool = True) -> dict:
+=======
+                       calculate_metrics: bool = True) -> dict:
+>>>>>>> 015c03c9e65da3a9fde160ed1e1b7b748a0ed461
     """
     Full pipeline used by the FastAPI endpoint.
     
@@ -287,7 +297,10 @@ def process_audio_file(input_path: Path, out_dir: Path,
         out_dir: Directory to save output files
         output_mode: "audio" | "text" | "both" - what to return
         calculate_metrics: Whether to calculate fluency metrics
+<<<<<<< HEAD
         grammar_correction: Whether to apply grammar correction
+=======
+>>>>>>> 015c03c9e65da3a9fde160ed1e1b7b748a0ed461
     
     Returns:
         Dictionary with:
@@ -307,7 +320,11 @@ def process_audio_file(input_path: Path, out_dir: Path,
     result = {}
     
     try:
+<<<<<<< HEAD
         logger.info(f"Starting processing for {input_path.name} (mode: {output_mode}, grammar: {grammar_correction})")
+=======
+        logger.info(f"Starting processing for {input_path.name} (mode: {output_mode})")
+>>>>>>> 015c03c9e65da3a9fde160ed1e1b7b748a0ed461
         
         # Load raw audio for metrics calculation
         raw_audio, sample_rate = None, None
@@ -324,9 +341,15 @@ def process_audio_file(input_path: Path, out_dir: Path,
         logger.info(f"ASR completed. Raw text: {raw_text[:100]}...")
         result["raw_text"] = raw_text
 
+<<<<<<< HEAD
         # 2. Text cleaning (with optional grammar correction)
         logger.info(f"Step 2/3: Cleaning text (grammar correction: {grammar_correction})...")
         cleaned_text = clean_stuttered_text(raw_text, apply_grammar_correction=grammar_correction)
+=======
+        # 2. Text cleaning
+        logger.info("Step 2/3: Cleaning text...")
+        cleaned_text = clean_stuttered_text(raw_text)
+>>>>>>> 015c03c9e65da3a9fde160ed1e1b7b748a0ed461
         logger.info(f"Text cleaned. Result: {cleaned_text[:100]}...")
         
         # Calculate metrics if requested
